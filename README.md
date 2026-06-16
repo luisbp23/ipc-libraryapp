@@ -5,5 +5,9 @@ Repositório para controlo de versões e gestão de ficheiros para trabalho de g
 Criação de uma interface para uma aplicação Android baseada nos princípios de usabilidade e acessibilidade, tendo como tema uma aplicação para uma biblioteca.
 
 É dividido em duas partes: 
-- 1ª parte: análise de tarefas e criação de protótipos de baixa e média fidelidade.
-- 2ª parte: 
+- 1ª parte: análise de tarefas e criação de protótipos de baixa e média fidelidade;
+- 2ª parte: desenvolvimento dos protótipos de alta fidelidade e funcionais.
+
+## Organização do Repositório
+
+O repositório contém os relatórios da primeira e segunda partes e o código do protótipo funcional.
