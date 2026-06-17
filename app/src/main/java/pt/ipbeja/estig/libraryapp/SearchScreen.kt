@@ -56,11 +56,27 @@ fun SearchHeaderSection(query: String, onQueryChange: (String) -> Unit) {
 
 @Composable
 fun ThemesCarouselSection() {
-    Text(text = "Tema?", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+    // Lista de temas possíveis
+    val temas = listOf(
+        "Ficção", "Aventura", "Ciência", "História",
+        "Romance", "Poesia", "Mistério", "Fantasia", "Terror"
+    )
+
+    // Escolhe um tema aleatório sempre que o ecrã é aberto
+    val temaAleatorio = remember { temas.random() }
+
+    // Mostra o tema sorteado
+    Text(text = "Que tal $temaAleatorio?", fontSize = 20.sp, fontWeight = FontWeight.Bold)
     Spacer(modifier = Modifier.height(12.dp))
+
     LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         items(5) {
-            Box(modifier = Modifier.size(100.dp, 140.dp).background(Color.DarkGray, RoundedCornerShape(8.dp)), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .size(100.dp, 140.dp)
+                    .background(Color.DarkGray, RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(Icons.Filled.Book, contentDescription = null, tint = Color.LightGray)
             }
         }
@@ -80,16 +96,32 @@ fun DiscoverCardItem() {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Row(modifier = Modifier.fillMaxSize().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.size(70.dp, 100.dp).background(Color.Gray, RoundedCornerShape(6.dp)), contentAlignment = Alignment.Center) {
+        Row(
+            modifier = Modifier.fillMaxSize().padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(70.dp, 100.dp)
+                    .background(Color.Gray, RoundedCornerShape(6.dp)),
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(Icons.Filled.Book, contentDescription = null, tint = Color.LightGray)
             }
             Spacer(modifier = Modifier.width(16.dp))
-            Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
+            ) {
                 Text("Livro Recomendado", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Text("Nome do Autor", color = Color.Gray, fontSize = 14.sp)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Uma breve descrição ou sinopse do livro aparece aqui...", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
+                Text(
+                    text = "Uma breve descrição ou sinopse do livro aparece aqui...",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2
+                )
             }
         }
     }
