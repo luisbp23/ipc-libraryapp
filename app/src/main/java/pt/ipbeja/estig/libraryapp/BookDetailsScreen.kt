@@ -56,24 +56,24 @@ fun BookCoverSection() {
 
 @Composable
 fun BookTitleSection() {
-    Text(text = "The Book Title Here", fontSize = 24.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-    Text(text = "Author Name", fontSize = 16.sp, color = Color.Gray, textAlign = TextAlign.Center)
+    Text(text = "O Título do Livro Aqui", fontSize = 24.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+    Text(text = "Nome do Autor", fontSize = 16.sp, color = Color.Gray, textAlign = TextAlign.Center)
 }
 
 @Composable
 fun BookStatsSection() {
     Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-        Icon(Icons.Filled.Star, contentDescription = "Rating", tint = Color(0xFFFFC107), modifier = Modifier.size(18.dp))
+        Icon(Icons.Filled.Star, contentDescription = "Avaliação", tint = Color(0xFFFFC107), modifier = Modifier.size(18.dp))
         Spacer(modifier = Modifier.width(4.dp))
         Text("4.5", fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.width(16.dp))
         Text("•", color = Color.Gray)
         Spacer(modifier = Modifier.width(16.dp))
-        Text("240 Pages", color = Color.Gray)
+        Text("240 Páginas", color = Color.Gray)
         Spacer(modifier = Modifier.width(16.dp))
         Text("•", color = Color.Gray)
         Spacer(modifier = Modifier.width(16.dp))
-        Text("Fiction", color = Color.Gray)
+        Text("Ficção", color = Color.Gray)
     }
 }
 
@@ -81,10 +81,10 @@ fun BookStatsSection() {
 fun BookActionsSection() {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         Button(onClick = { }, modifier = Modifier.weight(1f), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
-            Text("Request", fontWeight = FontWeight.Bold)
+            Text("Requisitar", fontWeight = FontWeight.Bold)
         }
         OutlinedButton(onClick = { }, modifier = Modifier.weight(1f)) {
-            Text("Read Sample", fontWeight = FontWeight.Bold)
+            Text("Ler Amostra", fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -92,16 +92,16 @@ fun BookActionsSection() {
 @Composable
 fun BookSynopsisSection() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text("Synopsis", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Text("Sinopse", fontSize = 18.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "This is a detailed description of the book. It provides an overview of the plot, the main characters, and the setting.", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 20.sp)
+        Text(text = "Esta é uma descrição detalhada do livro. Fornece uma visão geral do enredo, das personagens principais e do ambiente. Ajuda o utilizador a decidir se pretende requisitar o livro ou ler uma amostra primeiro.", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 20.sp)
     }
 }
 
 @Composable
 fun BookRelatedSection() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text("Related Books", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Text("Livros Relacionados", fontSize = 18.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(12.dp))
         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             items(4) {
