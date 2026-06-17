@@ -7,7 +7,6 @@ package pt.ipbeja.estig.libraryapp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 /**
- * Header section of the catalog displaying the app name and scan action.
+ * Header section of the catalog displaying the app name.
  */
 @Composable
 fun TopHeader() {
@@ -27,8 +26,11 @@ fun TopHeader() {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "LibraryApp", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        IconButton(onClick = { }) { Icon(Icons.Filled.QrCodeScanner, contentDescription = "Scan") }
+        Text(
+            text = "LibraryApp",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
@@ -58,6 +60,7 @@ fun SearchBar() {
 @Composable
 fun TabsSection(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
     val tabs = listOf("Books", "Multimedia")
+
     TabRow(selectedTabIndex = selectedTabIndex) {
         tabs.forEachIndexed { index, title ->
             Tab(
@@ -79,8 +82,20 @@ fun FiltersSection() {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        FilterChip(selected = false, onClick = { }, label = { Text("Subject") })
-        FilterChip(selected = false, onClick = { }, label = { Text("School Year") })
-        FilterChip(selected = false, onClick = { }, label = { Text("Filters") })
+        FilterChip(
+            selected = false,
+            onClick = { },
+            label = { Text("Subject") }
+        )
+        FilterChip(
+            selected = false,
+            onClick = { },
+            label = { Text("School Year") }
+        )
+        FilterChip(
+            selected = false,
+            onClick = { },
+            label = { Text("Filters") }
+        )
     }
 }
