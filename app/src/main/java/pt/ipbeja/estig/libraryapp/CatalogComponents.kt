@@ -45,8 +45,8 @@ fun SearchBar() {
         value = searchText,
         onValueChange = { searchText = it },
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text("Search") },
-        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon") },
+        placeholder = { Text("Pesquisar") },
+        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Ícone de Pesquisa") },
         singleLine = true,
         shape = RoundedCornerShape(12.dp)
     )
@@ -54,12 +54,12 @@ fun SearchBar() {
 
 /**
  * Tabs component for switching between resource categories.
- * * @param selectedTabIndex The currently selected tab.
+ * @param selectedTabIndex The currently selected tab.
  * @param onTabSelected Callback invoked when a tab is clicked.
  */
 @Composable
 fun TabsSection(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
-    val tabs = listOf("Books", "Multimedia")
+    val tabs = listOf("Livros", "Multimédia")
 
     TabRow(selectedTabIndex = selectedTabIndex) {
         tabs.forEachIndexed { index, title ->
@@ -82,20 +82,8 @@ fun FiltersSection() {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        FilterChip(
-            selected = false,
-            onClick = { },
-            label = { Text("Subject") }
-        )
-        FilterChip(
-            selected = false,
-            onClick = { },
-            label = { Text("School Year") }
-        )
-        FilterChip(
-            selected = false,
-            onClick = { },
-            label = { Text("Filters") }
-        )
+        FilterChip(selected = false, onClick = { }, label = { Text("Tema") })
+        FilterChip(selected = false, onClick = { }, label = { Text("Ano Escolar") })
+        FilterChip(selected = false, onClick = { }, label = { Text("Filtros") })
     }
 }
