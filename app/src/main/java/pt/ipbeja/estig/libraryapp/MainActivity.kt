@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import pt.ipbeja.estig.libraryapp.ui.theme.LibraryAppTheme
 
 /**
  * Main entry point of the application.
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MaterialTheme {
+            LibraryAppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -66,6 +67,9 @@ fun AppNavigation() {
 
 /**
  * Composable that represents the Bottom Navigation Bar.
+ *
+ * @param currentRoute The currently selected navigation route.
+ * @param onRouteSelected Callback invoked when a navigation item is clicked.
  */
 @Composable
 fun AppBottomBar(currentRoute: String, onRouteSelected: (String) -> Unit) {
