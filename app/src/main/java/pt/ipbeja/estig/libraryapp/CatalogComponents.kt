@@ -4,9 +4,13 @@
  */
 package pt.ipbeja.estig.libraryapp
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -54,6 +58,7 @@ fun SearchBar() {
 
 /**
  * Tabs component for switching between resource categories.
+ *
  * @param selectedTabIndex The currently selected tab.
  * @param onTabSelected Callback invoked when a tab is clicked.
  */
@@ -73,41 +78,74 @@ fun TabsSection(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
 }
 
 /**
- * Filters component for refining the search results using checkboxes.
+ * Filters component for refining the search results using dropdown menus.
  */
 @Composable
 fun FiltersSection() {
-    var temaSelecionado by remember { mutableStateOf(false) }
-    var anoSelecionado by remember { mutableStateOf(false) }
-    var filtrosSelecionado by remember { mutableStateOf(false) }
+    val temas = listOf("Ficção", "Aventura", "Ciência", "História", "Romance", "Poesia")
+    val anos = listOf("1º Ano", "2º Ano", "3º Ano", "4º Ano", "5º Ano", "6º Ano", "7º Ano", "8º Ano", "9º Ano")
+    val filtros = listOf("Mais Recentes", "A-Z", "Melhor Avaliação")
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()), // Permite arrastar os filtros para os lados!
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = temaSelecionado,
-                onCheckedChange = { temaSelecionado = it }
-            )
-            Text("Tema", fontSize = 14.sp)
-        }
+        DropdownFilterItem(label = "Tema", options = temas)
+        DropdownFilterItem(label = "Ano Escolar", options = anos)
+        DropdownFilterItem(label = "Filtros", options = filtros)
+    }
+}
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = anoSelecionado,
-                onCheckedChange = { anoSelecionado = it }
-            )
-            Text("Ano Escolar", fontSize = 14.sp)
-        }
+/**
+ * Individual dropdown filter component.
+ *
+ * @param label The default label for the filter.
+ * @param options The list of options to display in the dropdown.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownFilterItem(label: String, options: List<String>) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOption by remember { mutableStateOf(label) }
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = filtrosSelecionado,
-                onCheckedChange = { filtrosSelecionado = it }
+    Box {
+        FilterChip(
+            selected = selectedOption != label,
+            onClick = { expanded = true },
+            label = { Text(selectedOption) },
+            trailingIcon = {
+                Icon(
+                    imageVector = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
+                    contentDescription = "Expandir $label"
+                )
+            }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            // Opção para limpar o filtro e voltar ao nome original
+            DropdownMenuItem(
+                text = { Text("Qualquer $label", fontWeight = FontWeight.Bold) },
+                onClick = {
+                    selectedOption = label
+                    expanded = false
+                }
             )
-            Text("Filtros", fontSize = 14.sp)
+            HorizontalDivider()
+
+            // Gerar a lista de opções a partir dos dados que fornecemos acima
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        selectedOption = option
+                        expanded = false
+                    }
+                )
+            }
         }
     }
 }
