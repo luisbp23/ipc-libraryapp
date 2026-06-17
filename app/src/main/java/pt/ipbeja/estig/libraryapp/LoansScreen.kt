@@ -38,7 +38,7 @@ fun LoansScreen() {
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        topBar = { TopAppBar(title = { Text("My Library", fontWeight = FontWeight.Bold) }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)) }
+        topBar = { TopAppBar(title = { Text("A Minha Biblioteca", fontWeight = FontWeight.Bold) }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)) }
     ) { paddingValues ->
         LoansList(
             modifier = Modifier.padding(paddingValues), loans = loans,
@@ -47,7 +47,7 @@ fun LoansScreen() {
                 val index = loans.indexOf(loan)
                 if (index != -1) {
                     loans[index] = loans[index].copy(isDownloaded = true)
-                    coroutineScope.launch { snackbarHostState.showSnackbar("${loan.title} is now available offline.") }
+                    coroutineScope.launch { snackbarHostState.showSnackbar("${loan.title} está agora disponível offline.") }
                 }
             }
         )
@@ -69,7 +69,7 @@ fun LoansScreen() {
 @Composable
 fun LoansList(modifier: Modifier = Modifier, loans: List<Loan>, onRenewRequested: (Loan) -> Unit, onDownloadRequested: (Loan) -> Unit) {
     LazyColumn(modifier = modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        item { Spacer(modifier = Modifier.height(4.dp)); Text(text = "Manage your borrowed books:", color = Color.Gray, fontSize = 14.sp) }
+        item { Spacer(modifier = Modifier.height(4.dp)); Text(text = "Gira os seus livros requisitados:", color = Color.Gray, fontSize = 14.sp) }
         items(loans) { loan -> LoanCard(loan = loan, onRenewClick = { onRenewRequested(loan) }, onDownloadClick = { onDownloadRequested(loan) }) }
     }
 }
@@ -78,10 +78,10 @@ fun LoansList(modifier: Modifier = Modifier, loans: List<Loan>, onRenewRequested
 fun RenewConfirmationDialog(bookTitle: String, onConfirm: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Confirm Renewal") },
-        text = { Text("Do you want to renew '$bookTitle'? This will add 15 days to your deadline.") },
-        confirmButton = { Button(onClick = onConfirm) { Text("Confirm") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel", color = Color.Gray) } }
+        title = { Text("Confirmar Renovação") },
+        text = { Text("Deseja renovar '$bookTitle'? Isto adicionará 15 dias ao seu prazo.") },
+        confirmButton = { Button(onClick = onConfirm) { Text("Confirmar") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancelar", color = Color.Gray) } }
     )
 }
 
@@ -118,9 +118,9 @@ fun LoanDetailsSection(loan: Loan) {
 fun LoanDeadlineIndicator(daysLeft: Int) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         val deadlineColor = if (daysLeft <= 3) Color.Red else MaterialTheme.colorScheme.primary
-        Icon(Icons.Filled.WarningAmber, contentDescription = "Deadline", modifier = Modifier.size(18.dp), tint = deadlineColor)
+        Icon(Icons.Filled.WarningAmber, contentDescription = "Prazo", modifier = Modifier.size(18.dp), tint = deadlineColor)
         Spacer(modifier = Modifier.width(6.dp))
-        Text(text = if (daysLeft == 1) "1 day left" else "$daysLeft days left", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = deadlineColor)
+        Text(text = if (daysLeft == 1) "Falta 1 dia" else "Faltam $daysLeft dias", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = deadlineColor)
     }
 }
 
@@ -128,14 +128,14 @@ fun LoanDeadlineIndicator(daysLeft: Int) {
 fun LoanActionButtons(loan: Loan, onRenewClick: () -> Unit, onDownloadClick: () -> Unit) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         TextButton(onClick = onDownloadClick, enabled = !loan.isDownloaded, colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary)) {
-            Icon(imageVector = if (loan.isDownloaded) Icons.Filled.CheckCircle else Icons.Filled.CloudDownload, contentDescription = "Read Offline", modifier = Modifier.size(20.dp))
+            Icon(imageVector = if (loan.isDownloaded) Icons.Filled.CheckCircle else Icons.Filled.CloudDownload, contentDescription = "Ler Offline", modifier = Modifier.size(20.dp))
             Spacer(modifier = Modifier.width(8.dp))
-            Text(if (loan.isDownloaded) "Downloaded" else "Read Offline", fontWeight = FontWeight.Bold)
+            Text(if (loan.isDownloaded) "Descarregado" else "Ler Offline", fontWeight = FontWeight.Bold)
         }
         Button(onClick = onRenewClick, enabled = !loan.isRenewed, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
-            Icon(Icons.Filled.Autorenew, contentDescription = "Renew", modifier = Modifier.size(18.dp))
+            Icon(Icons.Filled.Autorenew, contentDescription = "Renovar", modifier = Modifier.size(18.dp))
             Spacer(modifier = Modifier.width(8.dp))
-            Text(if (loan.isRenewed) "Renewed" else "Renew", fontWeight = FontWeight.Bold)
+            Text(if (loan.isRenewed) "Renovado" else "Renovar", fontWeight = FontWeight.Bold)
         }
     }
 }
