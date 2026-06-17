@@ -16,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,7 +58,7 @@ fun SearchBar() {
 }
 
 /**
- * Tabs component for switching between resource categories.
+ * Tabs component for switching between resource categories with custom colors.
  *
  * @param selectedTabIndex The currently selected tab.
  * @param onTabSelected Callback invoked when a tab is clicked.
@@ -66,12 +67,18 @@ fun SearchBar() {
 fun TabsSection(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
     val tabs = listOf("Livros", "Multimédia")
 
-    TabRow(selectedTabIndex = selectedTabIndex) {
+    TabRow(
+        selectedTabIndex = selectedTabIndex,
+        containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.primary
+    ) {
         tabs.forEachIndexed { index, title ->
             Tab(
                 selected = selectedTabIndex == index,
                 onClick = { onTabSelected(index) },
-                text = { Text(title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold) }
+                text = { Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold) },
+                selectedContentColor = MaterialTheme.colorScheme.primary,
+                unselectedContentColor = Color.Gray
             )
         }
     }
@@ -126,7 +133,6 @@ fun DropdownFilterItem(label: String, options: List<String>) {
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            // Opção para limpar o filtro e voltar ao nome original
             DropdownMenuItem(
                 text = { Text("Qualquer $label", fontWeight = FontWeight.Bold) },
                 onClick = {
@@ -136,7 +142,6 @@ fun DropdownFilterItem(label: String, options: List<String>) {
             )
             HorizontalDivider()
 
-            // Gerar a lista de opções a partir dos dados que fornecemos acima
             options.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(option) },

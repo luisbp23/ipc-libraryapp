@@ -18,7 +18,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import pt.ipbeja.estig.libraryapp.ui.theme.LibraryAppTheme
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 
 /**
  * Main entry point of the application.
@@ -66,31 +67,44 @@ fun AppNavigation() {
 }
 
 /**
- * Composable that represents the Bottom Navigation Bar.
+ * Composable that represents the Bottom Navigation Bar with custom theme colors.
  *
  * @param currentRoute The currently selected navigation route.
  * @param onRouteSelected Callback invoked when a navigation item is clicked.
  */
 @Composable
 fun AppBottomBar(currentRoute: String, onRouteSelected: (String) -> Unit) {
-    BottomAppBar {
+    BottomAppBar(
+        containerColor = MaterialTheme.colorScheme.surface
+    ) {
+        val navColors = NavigationBarItemDefaults.colors(
+            selectedIconColor = MaterialTheme.colorScheme.onPrimary, // Branco
+            selectedTextColor = MaterialTheme.colorScheme.primary,   // Vermelho
+            indicatorColor = MaterialTheme.colorScheme.primary,      // Bolha Vermelha
+            unselectedIconColor = Color.Gray,
+            unselectedTextColor = Color.Gray
+        )
+
         NavigationBarItem(
             selected = currentRoute == "Home",
             onClick = { onRouteSelected("Home") },
             icon = { Icon(Icons.Filled.Home, contentDescription = "Início") },
-            label = { Text("Início") }
+            label = { Text("Início", fontWeight = FontWeight.Bold) },
+            colors = navColors
         )
         NavigationBarItem(
             selected = currentRoute == "Search",
             onClick = { onRouteSelected("Search") },
             icon = { Icon(Icons.Filled.Search, contentDescription = "Pesquisar") },
-            label = { Text("Pesquisar") }
+            label = { Text("Pesquisar", fontWeight = FontWeight.Bold) },
+            colors = navColors
         )
         NavigationBarItem(
             selected = currentRoute == "Library",
             onClick = { onRouteSelected("Library") },
             icon = { Icon(Icons.Filled.LocalLibrary, contentDescription = "Biblioteca") },
-            label = { Text("Biblioteca") }
+            label = { Text("Biblioteca", fontWeight = FontWeight.Bold) },
+            colors = navColors
         )
     }
 }
