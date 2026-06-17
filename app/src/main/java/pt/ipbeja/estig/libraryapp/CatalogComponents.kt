@@ -73,17 +73,41 @@ fun TabsSection(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
 }
 
 /**
- * Filters component for refining the search results.
+ * Filters component for refining the search results using checkboxes.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FiltersSection() {
+    var temaSelecionado by remember { mutableStateOf(false) }
+    var anoSelecionado by remember { mutableStateOf(false) }
+    var filtrosSelecionado by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        FilterChip(selected = false, onClick = { }, label = { Text("Tema") })
-        FilterChip(selected = false, onClick = { }, label = { Text("Ano Escolar") })
-        FilterChip(selected = false, onClick = { }, label = { Text("Filtros") })
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = temaSelecionado,
+                onCheckedChange = { temaSelecionado = it }
+            )
+            Text("Tema", fontSize = 14.sp)
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = anoSelecionado,
+                onCheckedChange = { anoSelecionado = it }
+            )
+            Text("Ano Escolar", fontSize = 14.sp)
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = filtrosSelecionado,
+                onCheckedChange = { filtrosSelecionado = it }
+            )
+            Text("Filtros", fontSize = 14.sp)
+        }
     }
 }
