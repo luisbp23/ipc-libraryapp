@@ -41,14 +41,14 @@ fun SearchScreen() {
 @Composable
 fun SearchHeaderSection(query: String, onQueryChange: (String) -> Unit) {
     Spacer(modifier = Modifier.height(16.dp))
-    Text(text = "Search", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+    Text(text = "Pesquisar", fontSize = 32.sp, fontWeight = FontWeight.Bold)
     Spacer(modifier = Modifier.height(16.dp))
     OutlinedTextField(
         value = query,
         onValueChange = onQueryChange,
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text("Title, author, or ISBN") },
-        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search Icon") },
+        placeholder = { Text("Título, autor ou ISBN") },
+        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Ícone de Pesquisa") },
         shape = RoundedCornerShape(12.dp),
         singleLine = true
     )
@@ -56,7 +56,7 @@ fun SearchHeaderSection(query: String, onQueryChange: (String) -> Unit) {
 
 @Composable
 fun ThemesCarouselSection() {
-    Text(text = "Theme?", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+    Text(text = "Tema?", fontSize = 20.sp, fontWeight = FontWeight.Bold)
     Spacer(modifier = Modifier.height(12.dp))
     LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         items(5) {
@@ -69,7 +69,7 @@ fun ThemesCarouselSection() {
 
 @Composable
 fun DiscoverTitleSection() {
-    Text(text = "Discover", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+    Text(text = "Descobrir", fontSize = 20.sp, fontWeight = FontWeight.Bold)
     Spacer(modifier = Modifier.height(8.dp))
 }
 
@@ -86,10 +86,10 @@ fun DiscoverCardItem() {
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-                Text("Recommended Book", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text("Author Name", color = Color.Gray, fontSize = 14.sp)
+                Text("Livro Recomendado", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text("Nome do Autor", color = Color.Gray, fontSize = 14.sp)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "A brief description or synopsis snippet goes here...", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
+                Text(text = "Uma breve descrição ou sinopse do livro aparece aqui...", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
             }
         }
     }
