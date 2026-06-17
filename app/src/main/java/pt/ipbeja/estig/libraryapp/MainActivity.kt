@@ -73,20 +73,20 @@ fun AppBottomBar(currentRoute: String, onRouteSelected: (String) -> Unit) {
         NavigationBarItem(
             selected = currentRoute == "Home",
             onClick = { onRouteSelected("Home") },
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
-            label = { Text("Home") }
+            icon = { Icon(Icons.Filled.Home, contentDescription = "Início") },
+            label = { Text("Início") }
         )
         NavigationBarItem(
             selected = currentRoute == "Search",
             onClick = { onRouteSelected("Search") },
-            icon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
-            label = { Text("Search") }
+            icon = { Icon(Icons.Filled.Search, contentDescription = "Pesquisar") },
+            label = { Text("Pesquisar") }
         )
         NavigationBarItem(
             selected = currentRoute == "Library",
             onClick = { onRouteSelected("Library") },
-            icon = { Icon(Icons.Filled.LocalLibrary, contentDescription = "Library") },
-            label = { Text("Library") }
+            icon = { Icon(Icons.Filled.LocalLibrary, contentDescription = "Biblioteca") },
+            label = { Text("Biblioteca") }
         )
     }
 }
