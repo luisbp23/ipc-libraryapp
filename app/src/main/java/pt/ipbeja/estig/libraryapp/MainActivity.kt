@@ -9,7 +9,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -19,6 +18,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 
 /**
@@ -30,16 +30,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LibraryAppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    AppNavigation()
-                }
+                AppNavigation()
             }
         }
     }
 }
+
+private data class NavDestination(val route: String, val icon: ImageVector, val label: String)
+
+private val navDestinations = listOf(
+    NavDestination("Home", Icons.Filled.Home, "Início"),
+    NavDestination("Search", Icons.Filled.Search, "Pesquisar"),
+    NavDestination("Library", Icons.Filled.LocalLibrary, "Biblioteca")
+)
 
 /**
  * Handles the main bottom navigation and screen routing.
@@ -67,44 +70,27 @@ fun AppNavigation() {
 }
 
 /**
- * Composable that represents the Bottom Navigation Bar with custom theme colors.
- *
- * @param currentRoute The currently selected navigation route.
- * @param onRouteSelected Callback invoked when a navigation item is clicked.
+ * Bottom Navigation Bar built from [navDestinations].
  */
 @Composable
 fun AppBottomBar(currentRoute: String, onRouteSelected: (String) -> Unit) {
-    BottomAppBar(
-        containerColor = MaterialTheme.colorScheme.surface
-    ) {
+    BottomAppBar(containerColor = MaterialTheme.colorScheme.surface) {
         val navColors = NavigationBarItemDefaults.colors(
-            selectedIconColor = MaterialTheme.colorScheme.onPrimary, // Branco
-            selectedTextColor = MaterialTheme.colorScheme.primary,   // Vermelho
-            indicatorColor = MaterialTheme.colorScheme.primary,      // Bolha Vermelha
+            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+            selectedTextColor = MaterialTheme.colorScheme.primary,
+            indicatorColor = MaterialTheme.colorScheme.primary,
             unselectedIconColor = Color.Gray,
             unselectedTextColor = Color.Gray
         )
 
-        NavigationBarItem(
-            selected = currentRoute == "Home",
-            onClick = { onRouteSelected("Home") },
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Início") },
-            label = { Text("Início", fontWeight = FontWeight.Bold) },
-            colors = navColors
-        )
-        NavigationBarItem(
-            selected = currentRoute == "Search",
-            onClick = { onRouteSelected("Search") },
-            icon = { Icon(Icons.Filled.Search, contentDescription = "Pesquisar") },
-            label = { Text("Pesquisar", fontWeight = FontWeight.Bold) },
-            colors = navColors
-        )
-        NavigationBarItem(
-            selected = currentRoute == "Library",
-            onClick = { onRouteSelected("Library") },
-            icon = { Icon(Icons.Filled.LocalLibrary, contentDescription = "Biblioteca") },
-            label = { Text("Biblioteca", fontWeight = FontWeight.Bold) },
-            colors = navColors
-        )
+        navDestinations.forEach { dest ->
+            NavigationBarItem(
+                selected = currentRoute == dest.route,
+                onClick = { onRouteSelected(dest.route) },
+                icon = { Icon(dest.icon, contentDescription = dest.label) },
+                label = { Text(dest.label, fontWeight = FontWeight.Bold) },
+                colors = navColors
+            )
+        }
     }
 }

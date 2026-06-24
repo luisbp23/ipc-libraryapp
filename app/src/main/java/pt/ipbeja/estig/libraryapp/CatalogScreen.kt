@@ -4,6 +4,7 @@
  */
 package pt.ipbeja.estig.libraryapp
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,22 +16,15 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun CatalogScreen() {
-    Scaffold { paddingValues ->
-        CatalogContent(Modifier.padding(paddingValues))
-    }
-}
-
-/**
- * Content layout for the catalog screen.
- *
- * @param modifier The modifier to be applied to the layout.
- */
-@Composable
-fun CatalogContent(modifier: Modifier = Modifier) {
+    var selectedResource by remember { mutableStateOf<Resource?>(null) }
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
+    if (selectedResource != null) {
+        BackHandler(onBack = { selectedResource = null })
+    }
+
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 12.dp)
     ) {
@@ -47,10 +41,15 @@ fun CatalogContent(modifier: Modifier = Modifier) {
         FiltersSection()
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (selectedTabIndex == 0) {
-            ResourcesGrid()
+        if (selectedResource != null) {
+            BookDetailsScreen(
+                resource = selectedResource!!,
+                onBack = { selectedResource = null },
+                onAlternativeClick = { selectedResource = it }
+            )
         } else {
-            MultimediaGrid()
+            val resources = if (selectedTabIndex == 0) bookResources else multimediaResources
+            ResourceGrid(resources = resources, onResourceClick = { selectedResource = it })
         }
     }
 }

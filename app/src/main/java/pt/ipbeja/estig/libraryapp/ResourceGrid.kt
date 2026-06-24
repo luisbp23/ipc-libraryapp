@@ -6,6 +6,7 @@ package pt.ipbeja.estig.libraryapp
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -27,47 +28,126 @@ import androidx.compose.ui.unit.sp
 /**
  * Data class representing a catalog resource with a local image resource ID.
  */
-data class Resource(val id: Int, val title: String, val author: String, val imageResId: Int)
+data class Resource(
+    val id: Int,
+    val title: String,
+    val author: String,
+    val imageResId: Int,
+    val year: String,
+    val category: String,
+    val description: String,
+    val available: Boolean,
+    val alternativeIds: List<Int> = emptyList()
+)
+
+private const val SAMPLE_DESCRIPTION =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor " +
+    "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud."
+
+val bookResources = listOf(
+    Resource(
+        id = 1,
+        title = "Os Maias",
+        author = "Eça de Queirós",
+        imageResId = R.drawable.os_maias,
+        year = "11.º Ano",
+        category = "Romance",
+        description = SAMPLE_DESCRIPTION,
+        available = true
+    ),
+    Resource(
+        id = 2,
+        title = "Mensagem",
+        author = "Fernando Pessoa",
+        imageResId = R.drawable.mensagem,
+        year = "12.º Ano",
+        category = "Poesia",
+        description = SAMPLE_DESCRIPTION,
+        available = false,
+        alternativeIds = listOf(4, 3)
+    ),
+    Resource(
+        id = 3,
+        title = "Memorial do Convento",
+        author = "José Saramago",
+        imageResId = R.drawable.memorial,
+        year = "12.º Ano",
+        category = "Romance",
+        description = SAMPLE_DESCRIPTION,
+        available = true
+    ),
+    Resource(
+        id = 4,
+        title = "Os Lusíadas",
+        author = "Luís de Camões",
+        imageResId = R.drawable.lusiadas,
+        year = "9.º Ano",
+        category = "Poesia",
+        description = SAMPLE_DESCRIPTION,
+        available = true
+    )
+)
+
+val multimediaResources = listOf(
+    Resource(
+        id = 5,
+        title = "Inception",
+        author = "Christopher Nolan",
+        imageResId = R.drawable.inception,
+        year = "—",
+        category = "Ficção Científica",
+        description = SAMPLE_DESCRIPTION,
+        available = true
+    ),
+    Resource(
+        id = 6,
+        title = "Interstellar",
+        author = "Christopher Nolan",
+        imageResId = R.drawable.interstellar,
+        year = "—",
+        category = "Ficção Científica",
+        description = SAMPLE_DESCRIPTION,
+        available = false,
+        alternativeIds = listOf(5, 8)
+    ),
+    Resource(
+        id = 7,
+        title = "Tech Podcast",
+        author = "Tech Audio",
+        imageResId = R.drawable.podcast,
+        year = "—",
+        category = "Tecnologia",
+        description = SAMPLE_DESCRIPTION,
+        available = true
+    ),
+    Resource(
+        id = 8,
+        title = "Nature Doc",
+        author = "BBC",
+        imageResId = R.drawable.nature_doc,
+        year = "—",
+        category = "Documentário",
+        description = SAMPLE_DESCRIPTION,
+        available = true
+    )
+)
+
+val allResources: List<Resource> = bookResources + multimediaResources
+
+fun resourceById(id: Int): Resource? = allResources.find { it.id == id }
 
 /**
- * Grid component displaying the list of book resources.
+ * Grid component displaying a list of resources (books or multimedia).
  */
 @Composable
-fun ResourcesGrid() {
-    val resources = listOf(
-        Resource(1, "Os Maias", "Eça de Queirós", R.drawable.os_maias),
-        Resource(2, "Mensagem", "Fernando Pessoa", R.drawable.mensagem),
-        Resource(3, "Memorial do Convento", "José Saramago", R.drawable.memorial),
-        Resource(4, "Os Lusíadas", "Luís de Camões", R.drawable.lusiadas)
-    )
+fun ResourceGrid(resources: List<Resource>, onResourceClick: (Resource) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxSize()
     ) {
-        items(resources) { resource -> ResourceCard(resource) }
-    }
-}
-
-/**
- * Grid component displaying the list of multimedia resources.
- */
-@Composable
-fun MultimediaGrid() {
-    val multimedia = listOf(
-        Resource(5, "Inception", "Christopher Nolan", R.drawable.inception),
-        Resource(6, "Interstellar", "Christopher Nolan", R.drawable.interstellar),
-        Resource(7, "Tech Podcast", "Tech Audio", R.drawable.podcast),
-        Resource(8, "Nature Doc", "BBC", R.drawable.nature_doc)
-    )
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(multimedia) { resource -> ResourceCard(resource) }
+        items(resources) { resource -> ResourceCard(resource, onClick = { onResourceClick(resource) }) }
     }
 }
 
@@ -75,9 +155,12 @@ fun MultimediaGrid() {
  * Visual card representing a single resource with a local cover.
  */
 @Composable
-fun ResourceCard(resource: Resource) {
+fun ResourceCard(resource: Resource, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().height(260.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(260.dp)
+            .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
