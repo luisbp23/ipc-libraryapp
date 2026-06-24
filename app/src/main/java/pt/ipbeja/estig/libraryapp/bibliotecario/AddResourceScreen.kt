@@ -2,6 +2,7 @@ package pt.ipbeja.estig.libraryapp.bibliotecario
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -389,7 +390,7 @@ fun FormDropdown(label: String, selected: String, options: List<String>, onSelec
                 value = selected.ifEmpty { "Selecionar $label" },
                 onValueChange = {},
                 readOnly = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().clickable{expanded = true},
                 textStyle = LocalTextStyle.current.copy(fontSize = 18.sp),
                 trailingIcon = {
                     IconButton(onClick = { expanded = true }) {
@@ -402,8 +403,12 @@ fun FormDropdown(label: String, selected: String, options: List<String>, onSelec
                     unfocusedContainerColor = Color(0xFFF5E6C8),
                     focusedContainerColor = Color(0xFFF5E6C8),
                     unfocusedBorderColor = Color(0xFFBBA980),
-                    focusedBorderColor = DarkBurgundy
-                )
+                    focusedBorderColor = DarkBurgundy,
+                    disabledContainerColor = Color(0xFFF5E6C8), // mantém a cor quando desativado
+                    disabledBorderColor = Color(0xFFBBA980),
+                    disabledTextColor = DarkBurgundy
+                ),
+                enabled = false
             )
             DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                 options.forEach { option ->
