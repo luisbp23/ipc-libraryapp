@@ -1,7 +1,3 @@
-/**
- * Author: Ricardo Dias Guilherme
- * Student Number: 26971
- */
 package pt.ipbeja.estig.libraryapp
 
 import androidx.compose.foundation.Image
@@ -25,120 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/**
- * Data class representing a catalog resource with a local image resource ID.
- */
-data class Resource(
-    val id: Int,
-    val title: String,
-    val author: String,
-    val imageResId: Int,
-    val year: String,
-    val category: String,
-    val description: String,
-    val available: Boolean,
-    val alternativeIds: List<Int> = emptyList()
-)
-
-private const val SAMPLE_DESCRIPTION =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor " +
-    "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud."
-
-val bookResources = listOf(
-    Resource(
-        id = 1,
-        title = "Os Maias",
-        author = "Eça de Queirós",
-        imageResId = R.drawable.os_maias,
-        year = "11.º Ano",
-        category = "Romance",
-        description = SAMPLE_DESCRIPTION,
-        available = true
-    ),
-    Resource(
-        id = 2,
-        title = "Mensagem",
-        author = "Fernando Pessoa",
-        imageResId = R.drawable.mensagem,
-        year = "12.º Ano",
-        category = "Poesia",
-        description = SAMPLE_DESCRIPTION,
-        available = false,
-        alternativeIds = listOf(4, 3)
-    ),
-    Resource(
-        id = 3,
-        title = "Memorial do Convento",
-        author = "José Saramago",
-        imageResId = R.drawable.memorial,
-        year = "12.º Ano",
-        category = "Romance",
-        description = SAMPLE_DESCRIPTION,
-        available = true
-    ),
-    Resource(
-        id = 4,
-        title = "Os Lusíadas",
-        author = "Luís de Camões",
-        imageResId = R.drawable.lusiadas,
-        year = "9.º Ano",
-        category = "Poesia",
-        description = SAMPLE_DESCRIPTION,
-        available = true
-    )
-)
-
-val multimediaResources = listOf(
-    Resource(
-        id = 5,
-        title = "Inception",
-        author = "Christopher Nolan",
-        imageResId = R.drawable.inception,
-        year = "—",
-        category = "Ficção Científica",
-        description = SAMPLE_DESCRIPTION,
-        available = true
-    ),
-    Resource(
-        id = 6,
-        title = "Interstellar",
-        author = "Christopher Nolan",
-        imageResId = R.drawable.interstellar,
-        year = "—",
-        category = "Ficção Científica",
-        description = SAMPLE_DESCRIPTION,
-        available = false,
-        alternativeIds = listOf(5, 8)
-    ),
-    Resource(
-        id = 7,
-        title = "Tech Podcast",
-        author = "Tech Audio",
-        imageResId = R.drawable.podcast,
-        year = "—",
-        category = "Tecnologia",
-        description = SAMPLE_DESCRIPTION,
-        available = true
-    ),
-    Resource(
-        id = 8,
-        title = "Nature Doc",
-        author = "BBC",
-        imageResId = R.drawable.nature_doc,
-        year = "—",
-        category = "Documentário",
-        description = SAMPLE_DESCRIPTION,
-        available = true
-    )
-)
-
-val allResources: List<Resource> = bookResources + multimediaResources
-
-fun resourceById(id: Int): Resource? = allResources.find { it.id == id }
-
-/**
- * Grid component displaying a list of resources (books or multimedia).
- */
 @Composable
 fun ResourceGrid(resources: List<Resource>, onResourceClick: (Resource) -> Unit) {
     LazyVerticalGrid(
@@ -151,9 +33,6 @@ fun ResourceGrid(resources: List<Resource>, onResourceClick: (Resource) -> Unit)
     }
 }
 
-/**
- * Visual card representing a single resource with a local cover.
- */
 @Composable
 fun ResourceCard(resource: Resource, onClick: () -> Unit) {
     Card(
@@ -164,30 +43,17 @@ fun ResourceCard(resource: Resource, onClick: () -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ResourceCoverImage(resource.imageResId, resource.title)
+        Column(modifier = Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(
+                painter = painterResource(id = resource.imageResId),
+                contentDescription = "Capa",
+                modifier = Modifier.fillMaxWidth().weight(1f).clip(RoundedCornerShape(8.dp)).background(Color.DarkGray.copy(alpha = 0.2f)),
+                contentScale = ContentScale.Crop
+            )
             Spacer(modifier = Modifier.height(12.dp))
-            ResourceTextInfo(resource)
+            Text(text = resource.title, fontWeight = FontWeight.Bold, fontSize = 15.sp, textAlign = TextAlign.Center, maxLines = 1)
+            Text(text = resource.author, fontSize = 13.sp, color = Color.Gray, textAlign = TextAlign.Center, maxLines = 1)
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
-}
-
-@Composable
-fun ColumnScope.ResourceCoverImage(imageResId: Int, title: String) {
-    Image(
-        painter = painterResource(id = imageResId),
-        contentDescription = "Cover of $title",
-        modifier = Modifier.fillMaxWidth().weight(1f).clip(RoundedCornerShape(8.dp)).background(Color.DarkGray.copy(alpha = 0.2f)),
-        contentScale = ContentScale.Crop
-    )
-}
-
-@Composable
-fun ResourceTextInfo(resource: Resource) {
-    Text(text = resource.title, fontWeight = FontWeight.Bold, fontSize = 15.sp, textAlign = TextAlign.Center, maxLines = 1)
-    Text(text = resource.author, fontSize = 13.sp, color = Color.Gray, textAlign = TextAlign.Center, maxLines = 1)
-    Spacer(modifier = Modifier.height(4.dp))
 }

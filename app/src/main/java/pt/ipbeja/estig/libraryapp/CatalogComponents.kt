@@ -1,14 +1,12 @@
-/**
- * Author: Ricardo Dias Guilherme
- * Student Number: 26971
- */
 package pt.ipbeja.estig.libraryapp
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Search
@@ -21,27 +19,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/**
- * Header section of the catalog displaying the app name.
- */
 @Composable
-fun TopHeader() {
+fun TopHeader(onUserIconClick: () -> Unit = {}) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "LibraryApp",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
+        Text("LibraryApp", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+        Icon(
+            imageVector = Icons.Filled.AccountCircle,
+            contentDescription = "Perfil",
+            modifier = Modifier.size(36.dp).clickable { onUserIconClick() },
+            tint = MaterialTheme.colorScheme.primary
         )
     }
 }
 
-/**
- * Search bar component for filtering resources.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar() {
@@ -50,33 +44,27 @@ fun SearchBar() {
         value = searchText,
         onValueChange = { searchText = it },
         modifier = Modifier.fillMaxWidth(),
-        placeholder = { Text("Pesquisar") },
-        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Ícone de Pesquisa") },
+        placeholder = { Text("Pesquisa") },
+        leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Ícone") },
         singleLine = true,
-        shape = RoundedCornerShape(12.dp)
+        shape = CircleShape,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            disabledContainerColor = MaterialTheme.colorScheme.surface,
+        )
     )
 }
 
-/**
- * Tabs component for switching between resource categories with custom colors.
- *
- * @param selectedTabIndex The currently selected tab.
- * @param onTabSelected Callback invoked when a tab is clicked.
- */
 @Composable
 fun TabsSection(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
     val tabs = listOf("Livros", "Multimédia")
-
-    TabRow(
-        selectedTabIndex = selectedTabIndex,
-        containerColor = Color.Transparent,
-        contentColor = MaterialTheme.colorScheme.primary
-    ) {
+    TabRow(selectedTabIndex = selectedTabIndex, containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.primary) {
         tabs.forEachIndexed { index, title ->
             Tab(
                 selected = selectedTabIndex == index,
                 onClick = { onTabSelected(index) },
-                text = { Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold) },
+                text = { Text(title, fontSize = 18.sp, fontWeight = FontWeight.Bold) },
                 selectedContentColor = MaterialTheme.colorScheme.primary,
                 unselectedContentColor = Color.Gray
             )
@@ -84,72 +72,43 @@ fun TabsSection(selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
     }
 }
 
-/**
- * Filters component for refining the search results using dropdown menus.
- */
 @Composable
-fun FiltersSection() {
-    val temas = listOf("Ficção", "Aventura", "Ciência", "História", "Romance", "Poesia")
-    val anos = listOf("1º Ano", "2º Ano", "3º Ano", "4º Ano", "5º Ano", "6º Ano", "7º Ano", "8º Ano", "9º Ano")
-    val filtros = listOf("Mais Recentes", "A-Z", "Melhor Avaliação")
+fun FiltersSection(
+    selectedTabIndex: Int,
+    selectedAno: String, onAnoSelected: (String) -> Unit,
+    selectedTema: String, onTemaSelected: (String) -> Unit,
+    selectedFiltro: String, onFiltroSelected: (String) -> Unit
+) {
+    val anos = listOf("9.º Ano", "11.º Ano", "12.º Ano", "Geral")
+    val temas = listOf("Ficção Científica", "Tecnologia", "Documentário")
+    val filtros = listOf("Mais Recentes", "A-Z")
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()), // Permite arrastar os filtros para os lados!
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        DropdownFilterItem(label = "Tema", options = temas)
-        DropdownFilterItem(label = "Ano Escolar", options = anos)
-        DropdownFilterItem(label = "Filtros", options = filtros)
+    Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (selectedTabIndex == 0) {
+            DropdownFilterItem("Ano Esc.", anos, selectedAno, onAnoSelected)
+        } else {
+            DropdownFilterItem("Tema", temas, selectedTema, onTemaSelected)
+        }
+        DropdownFilterItem("Filtros", filtros, selectedFiltro, onFiltroSelected)
     }
 }
 
-/**
- * Individual dropdown filter component.
- *
- * @param label The default label for the filter.
- * @param options The list of options to display in the dropdown.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownFilterItem(label: String, options: List<String>) {
+fun DropdownFilterItem(label: String, options: List<String>, selectedOption: String, onOptionSelected: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf(label) }
-
     Box {
         FilterChip(
             selected = selectedOption != label,
             onClick = { expanded = true },
             label = { Text(selectedOption) },
-            trailingIcon = {
-                Icon(
-                    imageVector = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
-                    contentDescription = "Expandir $label"
-                )
-            }
+            trailingIcon = { Icon(imageVector = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown, contentDescription = "Expandir") }
         )
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = { Text("Qualquer $label", fontWeight = FontWeight.Bold) },
-                onClick = {
-                    selectedOption = label
-                    expanded = false
-                }
-            )
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            DropdownMenuItem(text = { Text("Qualquer $label", fontWeight = FontWeight.Bold) }, onClick = { onOptionSelected(label); expanded = false })
             HorizontalDivider()
-
             options.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selectedOption = option
-                        expanded = false
-                    }
-                )
+                DropdownMenuItem(text = { Text(option) }, onClick = { onOptionSelected(option); expanded = false })
             }
         }
     }
