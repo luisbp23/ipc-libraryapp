@@ -24,9 +24,14 @@ val BurntOrange = Color(0xFFDB4E18)
 /**
  * Cream beige color used for the application background.
  */
-val CreamBeige = Color(0xFFEFDEC2)
+val CreamBeige = Color(0xFFF8F2DE)
 
 /**
  * Cinza antracite para textos
  */
 val DarkGray = Color(0xFF393939)
+
+/**
+ * vermelho com menos opacidade
+ */
+val WeakRed = Color(0x4DCD0402)

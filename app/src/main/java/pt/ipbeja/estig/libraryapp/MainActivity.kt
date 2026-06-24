@@ -47,20 +47,19 @@ private val navDestinations = listOf(
 
 @Composable
 fun AppNavigation() {
-    @Composable
-    fun AppNavigation() {
-        var userType by remember { mutableStateOf<String?>(null) }
 
-        when (userType) {
-            null -> UserSelectionScreen(
-                onUserSelected = { userType = it }
-            )
-            "admin" -> AdminApp()
-            "professor" -> UserApp()
-            "aluno" -> UserApp()
-        }
+    var userType by remember { mutableStateOf<String?>(null) }
+
+    when (userType) {
+        null -> UserSelectionScreen(
+            onUserSelected = { userType = it }
+        )
+        "admin" -> AdminApp()
+        "professor" -> UserApp()
+        "aluno" -> UserApp()
     }
 }
+
 
 /**
  * Handles the main bottom navigation and screen routing.
