@@ -1,55 +1,71 @@
-/**
- * Author: Ricardo Dias Guilherme
- * Student Number: 26971
- */
 package pt.ipbeja.estig.libraryapp
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-/**
- * Main catalog screen displaying the available resources.
- */
 @Composable
-fun CatalogScreen() {
-    var selectedResource by remember { mutableStateOf<Resource?>(null) }
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+fun CatalogScreen(onBookClick: (Resource) -> Unit = {}, onGoHome: () -> Unit = {}) {
+    CatalogContent(Modifier, onBookClick, onGoHome)
+}
 
-    if (selectedResource != null) {
-        BackHandler(onBack = { selectedResource = null })
-    }
+@Composable
+fun CatalogContent(modifier: Modifier = Modifier, onBookClick: (Resource) -> Unit = {}, onGoHome: () -> Unit = {}) {
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    var selectedAno by remember { mutableStateOf("Ano Esc.") }
+    var selectedTema by remember { mutableStateOf("Tema") }
+    var selectedFiltro by remember { mutableStateOf("Filtros") }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .padding(horizontal = 12.dp)
     ) {
-        Spacer(modifier = Modifier.height(12.dp))
-        TopHeader()
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(4.dp))
+        TopHeader(onUserIconClick = onGoHome)
+        Spacer(modifier = Modifier.height(8.dp))
         SearchBar()
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         TabsSection(
             selectedTabIndex = selectedTabIndex,
-            onTabSelected = { newIndex -> selectedTabIndex = newIndex }
+            onTabSelected = { newIndex ->
+                selectedTabIndex = newIndex
+                selectedAno = "Ano Esc."
+                selectedTema = "Tema"
+            }
         )
         Spacer(modifier = Modifier.height(8.dp))
-        FiltersSection()
-        Spacer(modifier = Modifier.height(12.dp))
+        FiltersSection(
+            selectedTabIndex = selectedTabIndex,
+            selectedAno = selectedAno,
+            onAnoSelected = { selectedAno = it },
+            selectedTema = selectedTema,
+            onTemaSelected = { selectedTema = it },
+            selectedFiltro = selectedFiltro,
+            onFiltroSelected = { selectedFiltro = it }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
 
-        if (selectedResource != null) {
-            BookDetailsScreen(
-                resource = selectedResource!!,
-                onBack = { selectedResource = null },
-                onAlternativeClick = { selectedResource = it }
-            )
-        } else {
-            val resources = if (selectedTabIndex == 0) bookResources else multimediaResources
-            ResourceGrid(resources = resources, onResourceClick = { selectedResource = it })
+        // LÓGICA DE FILTRAGEM
+        var baseList = if (selectedTabIndex == 0) MockData.bookResources else MockData.multimediaResources
+
+        if (selectedTabIndex == 0 && selectedAno != "Ano Esc." && selectedAno != "Qualquer Ano Esc.") {
+            baseList = baseList.filter { it.year == selectedAno }
         }
+        if (selectedTabIndex == 1 && selectedTema != "Tema" && selectedTema != "Qualquer Tema") {
+            baseList = baseList.filter { it.category == selectedTema }
+        }
+
+        // LÓGICA DE ORDENAÇÃO
+        if (selectedFiltro == "A-Z") {
+            baseList = baseList.sortedBy { it.title }
+        } else if (selectedFiltro == "Mais Recentes") {
+            baseList = baseList.sortedByDescending { it.id }
+        }
+
+        ResourceGrid(resources = baseList, onResourceClick = onBookClick)
     }
 }

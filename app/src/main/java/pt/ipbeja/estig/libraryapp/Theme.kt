@@ -1,7 +1,3 @@
-/**
- * Author: Ricardo Dias Guilherme
- * Student Number: 26971
- */
 package pt.ipbeja.estig.libraryapp
 
 import android.app.Activity
@@ -16,9 +12,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-/**
- * Color scheme mapping for dark mode environments.
- */
 private val DarkColorScheme = darkColorScheme(
     primary = BurntOrange,
     onPrimary = Color.White,
@@ -32,9 +25,6 @@ private val DarkColorScheme = darkColorScheme(
     surfaceVariant = Color(0xFF2A0303)
 )
 
-/**
- * Main color scheme mapping for the application's light mode.
- */
 private val LightColorScheme = lightColorScheme(
     primary = DeepRed,
     onPrimary = Color.White,
@@ -48,12 +38,6 @@ private val LightColorScheme = lightColorScheme(
     surfaceVariant = Color(0x7FEFDEC2)
 )
 
-/**
- * Main theme wrapper for the LibraryApp.
- *
- * @param darkTheme Indicates if the system is in dark mode.
- * @param content The composable content to be styled.
- */
 @Composable
 fun LibraryAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -65,7 +49,8 @@ fun LibraryAppTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            // Coloca a barra de status com a cor do background em vez do primary
+            window.statusBarColor = colorScheme.background.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
