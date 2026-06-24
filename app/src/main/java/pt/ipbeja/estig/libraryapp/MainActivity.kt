@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import pt.ipbeja.estig.libraryapp.bibliotecario.AdminApp
 
 /**
  * Main entry point of the application.
@@ -44,11 +45,28 @@ private val navDestinations = listOf(
     NavDestination("Library", Icons.Filled.LocalLibrary, "Biblioteca")
 )
 
+@Composable
+fun AppNavigation() {
+    @Composable
+    fun AppNavigation() {
+        var userType by remember { mutableStateOf<String?>(null) }
+
+        when (userType) {
+            null -> UserSelectionScreen(
+                onUserSelected = { userType = it }
+            )
+            "admin" -> AdminApp()
+            "professor" -> UserApp()
+            "aluno" -> UserApp()
+        }
+    }
+}
+
 /**
  * Handles the main bottom navigation and screen routing.
  */
 @Composable
-fun AppNavigation() {
+fun UserApp() {
     var currentRoute by remember { mutableStateOf("Home") }
 
     Scaffold(
