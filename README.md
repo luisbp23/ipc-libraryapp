@@ -10,4 +10,4 @@ Criação de uma interface para uma aplicação Android baseada nos princípios 
 
 ## Organização do Repositório
 
-O repositório contém os relatórios da primeira e segunda partes e o código do protótipo funcional.
+O repositório contém o código do protótipo funcional.
