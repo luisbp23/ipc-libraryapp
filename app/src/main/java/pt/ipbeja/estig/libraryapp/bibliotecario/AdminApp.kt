@@ -1,5 +1,6 @@
 package pt.ipbeja.estig.libraryapp.bibliotecario
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,9 +25,11 @@ import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.LocalLibrary
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,8 +54,39 @@ fun AdminApp() {
     var showAddMenu by remember { mutableStateOf(false) }
     var selectedResourceType by remember { mutableStateOf("livro") }
 
+    var showExitDialog by remember { mutableStateOf(false) }
+    var pendingResourceType by remember { mutableStateOf("") }
     var books by remember { mutableStateOf(listOf(BookForm())) }
     var medias by remember { mutableStateOf(listOf(MediaForm())) }
+
+    BackHandler(enabled = currentRoute != "Biblioteca") {
+        currentRoute = "Biblioteca"
+    }
+
+    BackHandler(enabled = currentRoute == "AdicionarRecurso" || currentRoute == "VerificarDados") {
+        showExitDialog = true
+    }
+
+    if (showExitDialog) {
+        AlertDialog(
+            onDismissRequest = { showExitDialog = false },
+            title = { Text("Sair do formulário?") },
+            text = { Text("Os dados inseridos serão perdidos.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showExitDialog = false
+                    books = listOf(BookForm())
+                    medias = listOf(MediaForm())
+                    selectedResourceType = if (pendingResourceType.isNotEmpty()) pendingResourceType else selectedResourceType
+                    pendingResourceType = ""
+                    currentRoute = "AdicionarRecurso"
+                }) { Text("Sair") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitDialog = false }) { Text("Cancelar") }
+            }
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -63,6 +97,8 @@ fun AdminApp() {
                     onRouteSelected = { route ->
                         if (route == "Novo") {
                             showAddMenu = true
+                        } else if (currentRoute == "AdicionarRecurso" || currentRoute == "VerificarDados") {
+                            showExitDialog = true
                         } else {
                             currentRoute = route
                         }
@@ -73,14 +109,14 @@ fun AdminApp() {
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                 when (currentRoute) {
                     "Biblioteca" -> CatalogScreen()
-                    "Gestão" -> ManagementScreen()
+                    "Gestao" -> ManagementScreen()
                     "AdicionarRecurso" -> AddResourceScreen(
                         resourceType = selectedResourceType,
                         books = books,
                         medias = medias,
                         onBooksChange = { books = it },
                         onMediasChange = { medias = it },
-                        onNavigateBack = { currentRoute = "Biblioteca" },
+                        onShowExitDialog = { showExitDialog = true },
                         onNavigateToVerify = { currentRoute = "VerificarDados" }
                     )
                     "VerificarDados" -> VerifyDataScreen(
@@ -103,11 +139,15 @@ fun AdminApp() {
             onDismiss = { showAddMenu = false },
             onNavigateToAddResource = { tipo ->
                 showAddMenu = false
-                selectedResourceType = tipo
-                // reset ao começar novo formulário
-                books = listOf(BookForm())
-                medias = listOf(MediaForm())
-                currentRoute = "AdicionarRecurso"
+                if (currentRoute == "AdicionarRecurso" || currentRoute == "VerificarDados") {
+                    pendingResourceType = tipo
+                    showExitDialog = true
+                } else {
+                    selectedResourceType = tipo
+                    books = listOf(BookForm())
+                    medias = listOf(MediaForm())
+                    currentRoute = "AdicionarRecurso"
+                }
             }
         )
     }
@@ -183,8 +223,8 @@ fun AdminBottomBar(
             AdminBottomNavItem(
                 label = "Gestão",
                 icon = Icons.Filled.Settings,
-                isSelected = currentRoute == "Gestão"
-            ) { onRouteSelected("Gestão") }
+                isSelected = currentRoute == "Gestao"
+            ) { onRouteSelected("Gestao") }
         }
     }
 }

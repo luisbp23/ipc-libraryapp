@@ -50,7 +50,7 @@ fun AddResourceScreen(
     medias: List<MediaForm>,
     onBooksChange: (List<BookForm>) -> Unit,
     onMediasChange: (List<MediaForm>) -> Unit,
-    onNavigateBack: () -> Unit,
+    onShowExitDialog: () -> Unit,
     onNavigateToVerify: () -> Unit
 ) {
     val isLivro = resourceType == "livro"
@@ -79,7 +79,7 @@ fun AddResourceScreen(
             onNext = { if (currentIndex < totalItems - 1) currentIndex++ },
             onAdd = { addNew() },
             onDelete = { deleteCurrent() },
-            onNavigateBack = onNavigateBack
+            onShowExitDialog = onShowExitDialog
         )
 
         Column(
@@ -134,7 +134,7 @@ fun AddResourceTopBar(
     onNext: () -> Unit,
     onAdd: () -> Unit,
     onDelete: () -> Unit,
-    onNavigateBack: () -> Unit
+    onShowExitDialog: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -149,7 +149,7 @@ fun AddResourceTopBar(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = onNavigateBack) {
+                IconButton(onClick = onShowExitDialog) {
                     Icon(Icons.Filled.ArrowBack, contentDescription = "Voltar",
                         tint = DarkBurgundy, modifier = Modifier.size(32.dp))
                 }
