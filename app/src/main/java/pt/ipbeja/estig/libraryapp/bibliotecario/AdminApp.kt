@@ -70,8 +70,11 @@ fun AdminApp() {
     if (showExitDialog) {
         AlertDialog(
             onDismissRequest = { showExitDialog = false },
-            title = { Text("Sair do formulário?") },
-            text = { Text("Os dados inseridos serão perdidos.") },
+            containerColor = CreamBeige,
+            titleContentColor = DarkBurgundy,
+            textContentColor = DarkBurgundy,
+            title = { Text("Sair do formulário?", fontWeight = FontWeight.Bold) },
+            text = { Text("Os dados inseridos serão perdidos.", fontSize = 16.sp) },
             confirmButton = {
                 TextButton(onClick = {
                     showExitDialog = false
@@ -79,11 +82,14 @@ fun AdminApp() {
                     medias = listOf(MediaForm())
                     selectedResourceType = if (pendingResourceType.isNotEmpty()) pendingResourceType else selectedResourceType
                     pendingResourceType = ""
-                    currentRoute = "AdicionarRecurso"
-                }) { Text("Sair") }
+                    currentRoute = "Biblioteca"
+                }) { Text("Sair", fontSize = 18.sp, color = DarkBurgundy) }
             },
             dismissButton = {
-                TextButton(onClick = { showExitDialog = false }) { Text("Cancelar") }
+                TextButton(onClick = {
+                    showExitDialog = false
+                    pendingResourceType = ""
+                }) { Text("Cancelar", fontSize = 18.sp, color = DarkBurgundy) }
             }
         )
     }
