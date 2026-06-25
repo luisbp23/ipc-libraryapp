@@ -55,6 +55,7 @@ fun AdminApp() {
     var selectedResourceType by remember { mutableStateOf("livro") }
 
     var showExitDialog by remember { mutableStateOf(false) }
+    var pendingRoute by remember { mutableStateOf("") }
     var pendingResourceType by remember { mutableStateOf("") }
     var books by remember { mutableStateOf(listOf(BookForm())) }
     var medias by remember { mutableStateOf(listOf(MediaForm())) }
@@ -64,6 +65,7 @@ fun AdminApp() {
     }
 
     BackHandler(enabled = currentRoute == "AdicionarRecurso" || currentRoute == "VerificarDados") {
+        pendingRoute = "Biblioteca"
         showExitDialog = true
     }
 
@@ -82,7 +84,8 @@ fun AdminApp() {
                     medias = listOf(MediaForm())
                     selectedResourceType = if (pendingResourceType.isNotEmpty()) pendingResourceType else selectedResourceType
                     pendingResourceType = ""
-                    currentRoute = "Biblioteca"
+                    currentRoute = if (pendingRoute.isNotEmpty()) pendingRoute else "Biblioteca"
+                    pendingRoute = ""
                 }) { Text("Sair", fontSize = 18.sp, color = DarkBurgundy) }
             },
             dismissButton = {
@@ -104,6 +107,7 @@ fun AdminApp() {
                         if (route == "Novo") {
                             showAddMenu = true
                         } else if (currentRoute == "AdicionarRecurso" || currentRoute == "VerificarDados") {
+                            pendingRoute = route
                             showExitDialog = true
                         } else {
                             currentRoute = route
@@ -122,7 +126,10 @@ fun AdminApp() {
                         medias = medias,
                         onBooksChange = { books = it },
                         onMediasChange = { medias = it },
-                        onShowExitDialog = { showExitDialog = true },
+                        onShowExitDialog = {
+                            pendingRoute = "Biblioteca"
+                            showExitDialog = true
+                        },
                         onNavigateToVerify = { currentRoute = "VerificarDados" }
                     )
                     "VerificarDados" -> VerifyDataScreen(
@@ -147,6 +154,7 @@ fun AdminApp() {
                 showAddMenu = false
                 if (currentRoute == "AdicionarRecurso" || currentRoute == "VerificarDados") {
                     pendingResourceType = tipo
+                    pendingRoute = "AdicionarRecurso"
                     showExitDialog = true
                 } else {
                     selectedResourceType = tipo
